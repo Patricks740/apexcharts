@@ -1,26 +1,62 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import RealtimeLineChart from "./RealtimeLineChart";
+import series from "./data";
 
-function App() {
+const TIME_RANGE_IN_MILLISECONDS = 30 * 1000;
+const ADDING_DATA_INTERVAL_IN_MILLISECONDS = 1000;
+const ADDING_DATA_RATIO = 0.8;
+
+export default () => {
+  const nameList = ["a", "b", "c"];
+  const defaultDataList = nameList.map((name) => ({
+    name: name,
+    data: [],
+  }));
+  const [dataList, setDataList] = React.useState(defaultDataList);
+
+  let interval: any = undefined;
+
+  useEffect(() => {
+    const addDataRandomly = (data: any) => {
+      if (Math.random() < 1 - ADDING_DATA_RATIO) {
+        return data;
+      }
+      return [
+        ...data,
+        {
+          x: new Date(),
+          y: data.length * Math.random(),
+        },
+      ];
+    };
+    interval = setInterval(() => {
+      setDataList(
+        dataList.map((val:any) => {
+          return {
+            name: val.name,
+            data: addDataRandomly(val.data),
+          };
+        })
+      );
+    }, ADDING_DATA_INTERVAL_IN_MILLISECONDS);
+
+    return () => clearInterval(interval);
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <RealtimeLineChart
+        dataList={dataList}
+        range={TIME_RANGE_IN_MILLISECONDS}
+      />
+      <button
+        onClick={() => {
+          clearInterval(interval);
+        }}
+      >
+        Stop
+      </button>
+      
     </div>
   );
-}
-
-export default App;
+};
