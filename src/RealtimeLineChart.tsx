@@ -1,7 +1,7 @@
 import React from "react";
 import Chart from "react-apexcharts";
 
-export default (props: { dataList: any[] | undefined; range: any }) => {
+export default (props: { dataList: any[] | undefined; range: any| undefined }) => {
   const options = {
     chart: {
       id: "chart1",

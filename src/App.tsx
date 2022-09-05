@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import RealtimeLineChart from "./RealtimeLineChart";
 import series from "./data";
 
-const TIME_RANGE_IN_MILLISECONDS = 30 * 1000;
+const TIME_RANGE_IN_MILLISECONDS = 30 * 1000; // 30sek 
 const ADDING_DATA_INTERVAL_IN_MILLISECONDS = 1000;
 const ADDING_DATA_RATIO = 0.8;
 
@@ -47,7 +47,8 @@ export default () => {
     <div>
       <RealtimeLineChart
         dataList={dataList}
-        range={TIME_RANGE_IN_MILLISECONDS}
+        range={TIME_RANGE_IN_MILLISECONDS} 
+        // range={undefined} // set range or pass undefined for static data
       />
       <button
         onClick={() => {
